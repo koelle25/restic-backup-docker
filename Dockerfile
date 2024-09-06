@@ -1,4 +1,4 @@
-FROM alpine:latest as rclone
+FROM alpine:latest AS rclone
 
 # Get rclone executable
 ADD https://downloads.rclone.org/rclone-current-linux-amd64.zip /
