@@ -1,12 +1,21 @@
-FROM alpine:latest AS rclone
+FROM --platform=$TARGETPLATFORM docker.io/alpine:latest AS rclone
+ARG TARGETPLATFORM
+
+RUN apk add wget
 
 # Get rclone executable
-ADD https://downloads.rclone.org/rclone-current-linux-amd64.zip /
-RUN unzip rclone-current-linux-amd64.zip && mv rclone-*-linux-amd64/rclone /bin/rclone && chmod +x /bin/rclone
+RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
+        wget https://downloads.rclone.org/rclone-current-linux-amd64.zip && unzip rclone-current-linux-amd64.zip && mv rclone-*-linux-amd64/rclone /bin/rclone && chmod +x /bin/rclone; \
+    elif [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
+        wget https://downloads.rclone.org/rclone-current-linux-arm64.zip && unzip rclone-current-linux-arm64.zip && mv rclone-*-linux-arm64/rclone /bin/rclone && chmod +x /bin/rclone; \
+    elif [ "$TARGETPLATFORM" = "linux/arm/v7" ]; then \
+        wget https://downloads.rclone.org/rclone-current-linux-arm-v7.zip && unzip rclone-current-linux-arm-v7.zip && mv rclone-*-linux-arm-v7/rclone /bin/rclone && chmod +x /bin/rclone; \
+    fi
 
-FROM restic/restic:0.18.0
 
-RUN apk add --update --no-cache bash curl s-nail
+FROM docker.io/restic/restic:0.18.0
+
+RUN apk add --update --no-cache bash curl s-nail shadow
 
 COPY --from=rclone /bin/rclone /bin/rclone
 
@@ -35,6 +44,7 @@ ENV OS_PASSWORD=""
 ENV OS_REGION_NAME=""
 ENV OS_INTERFACE=""
 ENV OS_IDENTITY_API_VERSION=3
+ENV BACKUP_SOURCES=""
 
 # openshift fix
 RUN mkdir /.cache && \

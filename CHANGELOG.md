@@ -5,6 +5,20 @@
 * Replaced mailx with s-nail
 * Updated to restic 0.16.2
 
+## v1.4.2
+### Removed 
+* Execute a repository check after prune was passed as a parameter in the forget call - use RESTIC_CHECK_CRON Var instead
+
+## v1.4.1
+### Changed
+* Execute a repository check after prune was passed as a parameter in the forget call
+
+## v1.4.0
+
+### Added
+* Option to set the target folder backup
+* Multi-platform image build
+
 ## v1.3.2 (restic 0.16.0)
 
 ### Changed
