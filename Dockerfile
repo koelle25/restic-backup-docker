@@ -13,7 +13,7 @@ RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
     fi
 
 
-FROM docker.io/restic/restic:0.18.0
+FROM docker.io/restic/restic:0.18.1
 
 RUN apk add --update --no-cache bash curl s-nail shadow
 
