@@ -92,3 +92,5 @@ if [ -f "/hooks/post-backup.sh" ]; then
 else
     echo "Post-backup script not found ..."
 fi
+
+exit $backupRC
